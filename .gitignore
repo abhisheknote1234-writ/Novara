@@ -1,0 +1,41 @@
+# ─── Python ───────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ─── Novara Data (runtime-generated, not source) ──
+data/
+reports/
+*.db
+*.key
+
+# ─── MaternalGuard Large Files ────────────────────
+*.eeg
+*.pkl
+*.csv
+MaternalGuard/__pycache__/
+
+# ─── IDE ──────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Virtual Environments ─────────────────────────
+ecg_env/
+venv/
+.env/
+env/
+
+# ─── OS ───────────────────────────────────────────
+Thumbs.db
+.DS_Store
+
+# ─── Models (large binary) ────────────────────────
+models/

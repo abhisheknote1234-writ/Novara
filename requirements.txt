@@ -1,0 +1,23 @@
+# Novara — Dependencies
+# =====================
+# Install: pip install -r requirements.txt
+
+# Core
+streamlit>=1.30.0
+sqlalchemy>=2.0.0
+cryptography>=41.0.0
+
+# Signal Processing
+numpy>=1.24.0
+scipy>=1.11.0
+
+# Visualization
+plotly>=5.18.0
+matplotlib>=3.7.0
+pandas>=2.0.0
+
+# PDF Report Generation
+reportlab>=4.0.0
+
+# Utilities
+python-dateutil>=2.8.0

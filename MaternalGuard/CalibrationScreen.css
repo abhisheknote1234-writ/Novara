@@ -1,0 +1,229 @@
+/* CalibrationScreen.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+.calibration-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #fff5f7; /* Soft blush background */
+  font-family: 'Outfit', sans-serif;
+  color: #4a3a40;
+}
+
+.calibration-card {
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(244, 143, 177, 0.15);
+  padding: 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ffeef2;
+}
+
+.calibration-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f48fb1; /* Brand pink */
+  margin: 0 0 4px 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #b08a95;
+  margin: 0 0 32px 0;
+  letter-spacing: 0.5px;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Base Button Styles */
+.primary-btn {
+  background: linear-gradient(135deg, #f48fb1, #f6c8d5);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 8px 16px rgba(244, 143, 177, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(244, 143, 177, 0.4);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+.demo-btn {
+  margin-top: 24px;
+}
+
+/* IDLE STATE */
+.icon-wrapper {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.instruction {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #7a5a63;
+  margin-bottom: 16px;
+}
+
+/* CALIBRATING STATE */
+.pulse-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 32px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulse-core {
+  width: 60px;
+  height: 60px;
+  background-color: #f48fb1;
+  border-radius: 50%;
+  z-index: 3;
+  box-shadow: 0 0 20px rgba(244, 143, 177, 0.5);
+}
+
+.pulse-circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(244, 143, 177, 0.3);
+  border-radius: 50%;
+  z-index: 1;
+  animation: pulseAnim 3s infinite ease-out;
+}
+
+.pulse-circle.delay {
+  animation-delay: 1.5s;
+}
+
+@keyframes pulseAnim {
+  0% { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+.gathering-text {
+  font-size: 18px;
+  color: #7a5a63;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background-color: #ffeef2;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #7ed6a7; /* Calming green */
+  border-radius: 10px;
+  transition: width 0.05s linear;
+}
+
+/* COMPLETE STATE */
+.success-icon-wrapper {
+  font-size: 56px;
+  margin-bottom: 16px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+.state-complete h3 {
+  font-size: 24px;
+  color: #4a3a40;
+  margin: 0 0 8px 0;
+}
+
+.success-subtitle {
+  font-size: 15px;
+  color: #7a5a63;
+  margin-bottom: 32px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metric-box {
+  background: #fff5f7;
+  padding: 20px 16px;
+  border-radius: 16px;
+  border: 1px solid #fbdde5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s ease;
+}
+
+.metric-box:hover {
+  transform: translateY(-2px);
+}
+
+.metric-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b08a95;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f48fb1;
+}
+
+.unit {
+  font-size: 16px;
+  color: #7a5a63;
+  font-weight: 400;
+}
+
+.proceed-btn {
+  background: #7ed6a7; /* Success green */
+  box-shadow: 0 8px 16px rgba(126, 214, 167, 0.3);
+}
+
+.proceed-btn:hover {
+  background: #6cc496;
+  box-shadow: 0 12px 20px rgba(126, 214, 167, 0.4);
+}
