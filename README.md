@@ -36,6 +36,32 @@ Navigate to **http://localhost:8501**
 
 ---
 
+## ⚡ ARC Real-Time API + Frontend (FastAPI)
+
+New real-time A-R-C stack is available at:
+
+- Backend: `/arc.dashboard/backend/main.py`
+- Frontend: `/arc.dashboard/frontend/index.html`
+
+### Run backend
+
+```bash
+uvicorn main:app --app-dir arc.dashboard/backend --host 0.0.0.0 --port 8000 --reload
+```
+
+### API routes
+
+- `POST /api/ingest-data` → send raw ECG/PPG/EMG batches
+- `GET /api/process-data` → latest A/R/C + HRV features
+- `WS /ws/stream` → stream ingestion + real-time A/R/C updates
+
+### Frontend integration
+
+- Replace simulated calls with `GET /api/process-data` polling and/or `WS /ws/stream`
+- Use `window.pushRawSignals({ sampling_rate, signals: { ecg, ppg, emg } })` in `arc.dashboard/frontend/app.js`
+
+---
+
 ## 📁 Project Structure
 
 ```
