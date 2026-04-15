@@ -23,6 +23,9 @@ except Exception:  # pragma: no cover
     ant = None
 
 TRAPZ = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
+MIN_RR_MS = 300.0
+MAX_RR_MS = 2000.0
+MAX_RR_JUMP_MS = 200.0
 
 
 def _clip01(value: float) -> float:
@@ -131,16 +134,16 @@ class ARCProcessor:
         if len(peaks) < 3:
             return np.array([], dtype=float)
         rr_ms = np.diff(peaks) * (1000.0 / self.fs)
-        return rr_ms[(rr_ms >= 300.0) & (rr_ms <= 2000.0)]
+        return rr_ms[(rr_ms >= MIN_RR_MS) & (rr_ms <= MAX_RR_MS)]
 
     @staticmethod
     def _clean_rr(rr_ms: np.ndarray) -> np.ndarray:
         rr = np.asarray(rr_ms, dtype=float)
-        rr = rr[(rr > 300.0) & (rr < 2000.0)]
+        rr = rr[(rr >= MIN_RR_MS) & (rr <= MAX_RR_MS)]
         if len(rr) < 3:
             return rr
         diff = np.abs(np.diff(rr))
-        rr = rr[np.insert(diff < 200.0, 0, True)]
+        rr = rr[np.insert(diff < MAX_RR_JUMP_MS, 0, True)]
         return rr
 
     @staticmethod
@@ -255,7 +258,7 @@ class ARCProcessor:
         inv_entropy_n = _normalize(1.0 / (entropy + 1e-6), 0.0, 2.0)
         variance_rr = float(np.var(rr_ms)) if len(rr_ms) > 1 else 0.0
         var_ref = float(np.median(self.rr_var_history)) if self.rr_var_history else variance_rr
-        variance_stability = _clip01(1.0 - abs(variance_rr - var_ref) / max(var_ref, 1e-9))
+        variance_stability = _clip01(1.0 - abs(variance_rr - var_ref) / max(var_ref, variance_rr, 1e-9))
         coherence = 100.0 * ((ratio_n + inv_entropy_n + variance_stability) / 3.0)
 
         scores = {
@@ -331,7 +334,7 @@ class ARCProcessor:
             ecg_clean = self._preprocess(ecg)
             peaks = self._detect_rpeaks(ecg_clean)
         elif len(ppg) >= self.window_samples:
-            # PPG fallback when ECG buffer is insufficient.
+            # PPG fallback when ECG is insufficient but PPG has a full window.
             ppg = ppg[-self.window_samples :]
             ppg_clean = self._preprocess(ppg)
             peaks, _ = find_peaks(ppg_clean, distance=max(1, int(0.33 * self.fs)))
