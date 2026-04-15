@@ -22,6 +22,8 @@ try:
 except Exception:  # pragma: no cover
     ant = None
 
+TRAPZ = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
+
 
 def _clip01(value: float) -> float:
     return float(np.clip(value, 0.0, 1.0))
@@ -173,11 +175,10 @@ class ARCProcessor:
         nperseg = min(256, len(rr_interp))
         freqs, psd = welch(rr_interp, fs=fs_interp, nperseg=nperseg, noverlap=nperseg // 2)
 
-        trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
         lf_mask = (freqs >= 0.04) & (freqs < 0.15)
         hf_mask = (freqs >= 0.15) & (freqs <= 0.40)
-        lf = float(trapz(psd[lf_mask], freqs[lf_mask])) if np.sum(lf_mask) > 1 else 0.0
-        hf = float(trapz(psd[hf_mask], freqs[hf_mask])) if np.sum(hf_mask) > 1 else 0.0
+        lf = float(TRAPZ(psd[lf_mask], freqs[lf_mask])) if np.sum(lf_mask) > 1 else 0.0
+        hf = float(TRAPZ(psd[hf_mask], freqs[hf_mask])) if np.sum(hf_mask) > 1 else 0.0
         out["LF"] = max(lf, 0.0)
         out["HF"] = max(hf, 0.0)
         out["LFHF"] = float(out["LF"] / (out["HF"] + 1e-9))
@@ -253,8 +254,8 @@ class ARCProcessor:
             entropy = _sample_entropy(rr_ms) if len(rr_ms) > 5 else 0.0
         inv_entropy_n = _normalize(1.0 / (entropy + 1e-6), 0.0, 2.0)
         variance_rr = float(np.var(rr_ms)) if len(rr_ms) > 1 else 0.0
-        var_ref = float(np.median(self.rr_var_history)) if self.rr_var_history else max(variance_rr, 1.0)
-        variance_stability = _clip01(1.0 - abs(variance_rr - var_ref) / max(var_ref, 1.0))
+        var_ref = float(np.median(self.rr_var_history)) if self.rr_var_history else variance_rr
+        variance_stability = _clip01(1.0 - abs(variance_rr - var_ref) / max(var_ref, 1e-9))
         coherence = 100.0 * ((ratio_n + inv_entropy_n + variance_stability) / 3.0)
 
         scores = {
@@ -330,7 +331,7 @@ class ARCProcessor:
             ecg_clean = self._preprocess(ecg)
             peaks = self._detect_rpeaks(ecg_clean)
         elif len(ppg) >= self.window_samples:
-            # PPG fallback only if ECG not present.
+            # PPG fallback when ECG buffer is insufficient.
             ppg = ppg[-self.window_samples :]
             ppg_clean = self._preprocess(ppg)
             peaks, _ = find_peaks(ppg_clean, distance=max(1, int(0.33 * self.fs)))
