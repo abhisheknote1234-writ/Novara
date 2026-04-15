@@ -258,7 +258,8 @@ class ARCProcessor:
         inv_entropy_n = _normalize(1.0 / (entropy + 1e-6), 0.0, 2.0)
         variance_rr = float(np.var(rr_ms)) if len(rr_ms) > 1 else 0.0
         var_ref = float(np.median(self.rr_var_history)) if self.rr_var_history else variance_rr
-        variance_stability = _clip01(1.0 - abs(variance_rr - var_ref) / max(var_ref, variance_rr, 1e-9))
+        scale = max((var_ref + variance_rr) / 2.0, 1e-9)
+        variance_stability = _clip01(1.0 - abs(variance_rr - var_ref) / scale)
         coherence = 100.0 * ((ratio_n + inv_entropy_n + variance_stability) / 3.0)
 
         scores = {
