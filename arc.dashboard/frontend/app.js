@@ -54,6 +54,9 @@ function renderARC(payload) {
   document.getElementById("rVal").textContent = Number(payload.R).toFixed(2);
   document.getElementById("cVal").textContent = Number(payload.C).toFixed(2);
   document.getElementById("stateVal").textContent = payload.state;
+  document.getElementById("predVal").textContent = payload.prediction?.next_state || payload.state;
+  document.getElementById("momVal").textContent =
+    `${Number(payload.momentum?.dA || 0).toFixed(2)} / ${Number(payload.momentum?.dR || 0).toFixed(2)}`;
   pushPoint(payload);
   renderFeatures(payload.features || {});
 }
