@@ -1,0 +1,7 @@
+{
+  "$schema": "./luna-cycle-whispers-main/node_modules/wrangler/config-schema.json",
+  "name": "novara",
+  "compatibility_date": "2026-09-03",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "luna-cycle-whispers-main/@tanstack/react-start/server-entry"
+}
