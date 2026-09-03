@@ -37,5 +37,14 @@ env/
 Thumbs.db
 .DS_Store
 
+# ─── Node & Web ───────────────────────────────────
+node_modules/
+.tanstack/
+.wrangler/
+.vinxi/
+.output/
+
 # ─── Models (large binary) ────────────────────────
 models/
+novara/models/
+
